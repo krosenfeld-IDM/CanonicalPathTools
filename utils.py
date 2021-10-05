@@ -9,12 +9,12 @@ def get_datafiles():
         inc_df, pop_df
     """
     # incidence
-    tmp = r'C:\Users\krosenfeld\OneDrive - IDMOD\Data\Incidence\WHO'
+    tmp = r'C:\Users\krosenfeld\OneDrive - Institute for Disease Modeling\Data\Incidence\WHO'
     inc_df = pd.read_excel(os.path.join(tmp, 'incidence_series.xls'), sheet_name='Measles')
 
     # population
     # read in population
-    tmp = r'C:\Users\krosenfeld\OneDrive - IDMOD\Data\Population\WorldBank'
+    tmp = r'C:\Users\krosenfeld\OneDrive - Institute for Disease Modeling\Data\Population\WorldBank'
     pop_df = pd.read_csv(os.path.join(tmp, 'API_SP.POP.TOTL_DS2_en_csv_v2_673119.csv'), header=2)
 
     return inc_df, pop_df
