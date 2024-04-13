@@ -1,0 +1,17 @@
+[project]
+name = "src"
+version = "0.0.1"
+authors = [
+  { name="Katherine", email="krosenf@gmail.com" },
+]
+description = "A small source package with extras"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

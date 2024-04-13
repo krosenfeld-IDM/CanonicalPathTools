@@ -2,29 +2,33 @@ import os
 import numpy as np
 import pandas as pd
 
-def get_datafiles():
+# import paths
+from src import paths
+from src.standards import DataNames
+
+def get_datafiles(cases: str, population: str):
     """Returns Measles Incidence from WHO data file and country populations from pop_df
 
     Returns:
         inc_df, pop_df
     """
     # incidence
-    tmp = r'C:\Users\krosenfeld\OneDrive - Institute for Disease Modeling\Data\Incidence\WHO'
-    inc_df = pd.read_excel(os.path.join(tmp, 'incidence_series.xls'), sheet_name='Measles')
+    # inc_df = pd.read_excel(os.path.join(paths.data, 'measlescasesbycountrybymonth.xlsx'), sheet_name='WEB')
+    inc_df = pd.read_csv(os.path.join(paths.data, f"{DataNames.cleaned}_{cases}"))
 
     # population
     # read in population
-    tmp = r'C:\Users\krosenfeld\OneDrive - Institute for Disease Modeling\Data\Population\WorldBank'
-    pop_df = pd.read_csv(os.path.join(tmp, 'API_SP.POP.TOTL_DS2_en_csv_v2_673119.csv'), header=2)
+    pop_df = pd.read_csv(os.path.join(paths.data, f"{DataNames.cleaned}_{population}"))
 
     return inc_df, pop_df
 
 def get_data_lookup(inc_df,pop_df):
     """Return DF for matching country names and country codes between datasets"""
     # lookup table
-    df = pd.merge(pop_df, inc_df, on='ISO_code')
+    df = pd.merge(pop_df, inc_df, on='ISO3')
     all_cols = df.columns
-    keep_cols = {'Cname', 'ISO_code', 'WHO_Region', 'Country Name'}
+    # keep_cols = {'Cname', 'ISO3', 'WHO_Region', 'Country Name'}
+    keep_cols = {DataNames.country, DataNames.iso, DataNames.region}
     drop_cols = []
     for c in all_cols:
         if c not in keep_cols:
@@ -115,9 +119,8 @@ def calc_cv(cases, pop, t, ny=10, pop_norm=100000):
 
 def get_cases_pop(code, inc_df, pop_df, year = np.arange(1980, 2019)):
     """Retrieve the cases and population from the World Bank and WHO"""
-
-    cases = [inc_df[inc_df['ISO_code'] == code][str(y)].values[0] for y in year]
-    pop = [pop_df[pop_df['Country Code'] == code][str(y)].values[0] for y in year]
+    cases = [inc_df[inc_df[DataNames.iso] == code][str(y)].values[0] for y in year]
+    pop = [pop_df[pop_df[DataNames.iso] == code][str(y)].values[0] for y in year]
 
     # Cname = country.capitalize()
     # year =

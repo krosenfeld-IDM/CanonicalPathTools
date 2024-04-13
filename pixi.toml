@@ -1,0 +1,20 @@
+[project]
+name = "CanonicalPathTools"
+version = "0.1.0"
+description = "Add a short description here"
+authors = ["Katherine <krosenf@gmail.com>"]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tasks]
+start = "python 2019/Fig1.py"
+
+[dependencies]
+matplotlib = ">=3.8.4,<3.9"
+pandas = ">=2.2.2,<2.3"
+python = "3.9.*"
+openpyxl = ">=3.1.2,<3.2"
+sciris = ">=3.1.6,<3.2"
+
+[pypi-dependencies]
+src = { path = "./src", editable = true}
