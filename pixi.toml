@@ -15,6 +15,7 @@ pandas = ">=2.2.2,<2.3"
 python = "3.9.*"
 openpyxl = ">=3.1.2,<3.2"
 sciris = ">=3.1.6,<3.2"
+pycountry = ">=22.3.5,<22.4"
 
 [pypi-dependencies]
 src = { path = "./src", editable = true}
