@@ -8,6 +8,7 @@ platforms = ["linux-64"]
 
 [tasks]
 start = "python 2019/Fig1.py"
+jupyter = "jupyter lab"
 
 [dependencies]
 matplotlib = ">=3.8.4,<3.9"
@@ -16,6 +17,7 @@ python = "3.9.*"
 openpyxl = ">=3.1.2,<3.2"
 sciris = ">=3.1.6,<3.2"
 pycountry = ">=22.3.5,<22.4"
+jupyter = ">=1.0.0,<1.1"
 
 [pypi-dependencies]
 src = { path = "./src", editable = true}
