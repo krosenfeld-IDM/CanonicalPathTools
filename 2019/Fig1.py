@@ -20,21 +20,8 @@ from src.standards import DataNames
 )
 
 
-# rename column to match
-# tmp = pop_df
-# tmp = pop_df.rename({"Country Code": "ISO3"}, axis=1)
-# inc_df = inc_df.rename(
-#     {"SpatialDimValueCode": "ISO3", "ParentLocationCode": "Region"}, axis=1
-# )
 # lookup table
 df = pd.merge(pop_df, inc_df, on=DataNames.iso)
-# all_cols = df.columns
-# keep_cols = {"Cname", "ISO3", "Region", "Country Name"}
-# drop_cols = []
-# for c in all_cols:
-#     if c not in keep_cols:
-#         drop_cols.append(c)
-# df.drop(drop_cols, axis=1, inplace=True)
 df.head()
 
 
@@ -135,4 +122,4 @@ ax.legend(
     loc="upper left", bbox_to_anchor=(1.01, 1), ncol=2, borderaxespad=0, frameon=False
 )
 plt.gcf().tight_layout()
-plt.savefig(f"{paths.scripts}/Fig1.png", transparent=False)
+plt.savefig(f"{paths.figures}/Fig1.png", transparent=False)
