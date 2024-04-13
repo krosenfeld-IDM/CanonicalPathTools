@@ -118,7 +118,7 @@ def calc_cv(cases, pop, t, ny=10, pop_norm=100000):
 
     return cv, t
 
-def get_cases_pop(code, inc_df, pop_df, year = np.arange(1980, 2019)):
+def get_cases_pop(code, inc_df, pop_df, year = np.arange(1974, 2019)):
     """Retrieve the cases and population from the World Bank and WHO"""
     cases = [inc_df[inc_df[DataNames.iso] == code][str(y)].values[0] for y in year]
     pop = [pop_df[pop_df[DataNames.iso] == code][str(y)].values[0] for y in year]
