@@ -7,11 +7,14 @@ from pathlib import Path
 # Absolute path to the top level of the repository
 root = Path(__file__).resolve().parents[2].absolute()
 
-# Absolute path to the `src` folder
+# Absolute path to the project folder
 src = root
 
-# Absolute path to the `src/data` folder (contains datasets)
+# Absolute path to the `data` folder (contains datasets)
 data = src / "data"
 
-# Absolute path to the `src/scripts` folder (contains figure/pipeline scripts)
+# Absolute path to the `scripts` folder (contains figure/pipeline scripts)
 scripts = src / "2019"
+
+# Absolute path to the `figures` folder (contains generated figures)
+figures = src / "figures"
