@@ -1,4 +1,5 @@
 import os
+import pycountry
 import numpy as np
 import pandas as pd
 
@@ -127,3 +128,7 @@ def get_cases_pop(code, inc_df, pop_df, year = np.arange(1974, 2019)):
     cases = np.nan_to_num(cases)
 
     return np.array(cases), np.array(pop), np.array(year)
+
+def get_country_code(country):
+    """Get the ISO3 code for a country"""
+    return pycountry.countries.search_fuzzy(country)[0].alpha_3
