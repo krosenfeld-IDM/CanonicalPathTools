@@ -44,10 +44,21 @@ def calc_weights(n, s=3, dx=2):
     w = 1/(s*np.sqrt(2*np.pi)) * np.exp(-0.5*(x+dx)**2/s**2)
     return w / np.sum(w)
 
-def calc_wmi(cases, pop, t, pop_norm = 100000, ny=10):
-    """Calculate weighted mean incidence
+def calc_wmi(cases, pop, t, pop_norm=100000, start_year=1980):
+    """Calculate weighted mean incidence.
 
-    ny: number of data points / years to include in the calculation
+    This function calculates the weighted mean incidence using the given cases, population, and time data.
+    The weighted mean incidence is calculated by dividing the sum of weighted cases by the sum of weights.
+
+    Args:
+        cases (ndarray): An array of case data.
+        pop (ndarray): An array of population data.
+        t (ndarray): An array of time data.
+        pop_norm (int, optional): The normalization factor for the population. Defaults to 100000.
+        start_year (int, optional): The starting year for the calculation. Defaults to 1980.
+
+    Returns:
+        tuple: A tuple containing the calculated weighted mean incidence (mi) and the updated time data (t).
     """
 
     # check that number of cases and population are the same size
@@ -58,16 +69,18 @@ def calc_wmi(cases, pop, t, pop_norm = 100000, ny=10):
     # number of samples
     nx = len(cases)
     # make sure the we have enough samples
-    assert nx >= ny
+    assert start_year in t
+
     # initialize array
-    mi = np.zeros(nx-ny+1)
+    mi = np.zeros(t.max() - start_year + 1)
+    ii = np.where(t == start_year)[0][0]
+
     # loop through calculation
-    weights = calc_weights(ny)
+    for ix in range(1,len(mi)+1):
+        weights = calc_weights(ix)
+        mi[ix-1] = pop_norm * np.sum(weights * cases[ii:(ii+ix)] / pop[ii:(ii+ix)]) / np.sum(weights)
 
-    for ix in range(len(mi)):
-        mi[ix] = pop_norm * np.sum(weights * cases[ix:(ix+ny)] / pop[ix:(ix+ny)]) / np.sum(weights)
-
-    t = t[(ny-1):]
+    t = t[ii:]
 
     return mi, t
 
