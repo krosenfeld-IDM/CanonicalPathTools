@@ -94,7 +94,10 @@ def calc_lcv(cases, pop, ny=10, pop_norm = 100000):
         den = (nxp - 1) * np.sum(weights) / nxp
 
         # coefficient of variation is std / mean
-        wcv[ix] = np.sqrt(num / den) / wmi
+        if wmi > 0:
+            wcv[ix] = np.sqrt(num / den) / wmi
+        else:
+            wcv[ix] = 0
 
     return wcv
 
