@@ -1,4 +1,5 @@
 import os
+import pycountry
 import numpy as np
 import pandas as pd
 
@@ -37,10 +38,11 @@ def get_data_lookup(inc_df,pop_df):
     return df
 
 def calc_weights(n, s=3, dx=2):
-    """Gaussian function for weighting """
+    """ Gaussian function for weighting """
 
     x = np.arange(-n, 0) + dx - 1
-    return 1/(s*np.sqrt(2*np.pi)) * np.exp(-0.5*(x+dx)**2/s**2)
+    w = 1/(s*np.sqrt(2*np.pi)) * np.exp(-0.5*(x+dx)**2/s**2)
+    return w / np.sum(w)
 
 def calc_wmi(cases, pop, t, pop_norm = 100000, ny=10):
     """Calculate weighted mean incidence
@@ -92,7 +94,10 @@ def calc_lcv(cases, pop, ny=10, pop_norm = 100000):
         den = (nxp - 1) * np.sum(weights) / nxp
 
         # coefficient of variation is std / mean
-        wcv[ix] = np.sqrt(num / den) / wmi
+        if wmi > 0:
+            wcv[ix] = np.sqrt(num / den) / wmi
+        else:
+            wcv[ix] = 0
 
     return wcv
 
@@ -117,15 +122,16 @@ def calc_cv(cases, pop, t, ny=10, pop_norm=100000):
 
     return cv, t
 
-def get_cases_pop(code, inc_df, pop_df, year = np.arange(1980, 2019)):
+def get_cases_pop(code, inc_df, pop_df, year = np.arange(1974, 2019)):
     """Retrieve the cases and population from the World Bank and WHO"""
     cases = [inc_df[inc_df[DataNames.iso] == code][str(y)].values[0] for y in year]
     pop = [pop_df[pop_df[DataNames.iso] == code][str(y)].values[0] for y in year]
 
-    # Cname = country.capitalize()
-    # year =
-    # lind = inc_df.apply(lambda r: r['Cname'].startswith(Cname), axis=1)
-    # cases = np.array([inc_df[lind][str(y)].values[0] for y in year])
-    # pop = np.array([pop_df[pop_df['Country Name'] == Cname][str(y)].values[0] for y in year])
+    # fill nans with zeros in cases
+    cases = np.nan_to_num(cases)
 
     return np.array(cases), np.array(pop), np.array(year)
+
+def get_country_code(country):
+    """Get the ISO3 code for a country"""
+    return pycountry.countries.search_fuzzy(country)[0].alpha_3
