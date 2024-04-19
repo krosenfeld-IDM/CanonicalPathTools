@@ -84,56 +84,66 @@ def calc_wmi(cases, pop, t, pop_norm=100000, start_year=1980):
 
     return mi, t
 
-def calc_lcv(cases, pop, ny=10, pop_norm = 100000):
+def calc_wcv(x, w):
+    """Calculate the weighted coefficient of variation.
+
+    This function calculates the weighted coefficient of variation using the given data.
+
+    Args:
+        x (ndarray): An array of data.
+        w (ndarray): An array of weights.
+
+    Returns:
+        float: The calculated weighted coefficient of variation.
+    """
+
+    # weighted mean
+    wm = np.sum(w * x) / np.sum(w)
+
+    # std
+    num = np.sum(w * (x - wm) ** 2)
+    # nxp = np.sum(w > 0)
+    den = np.sum(w)
+    # den = (nxp - 1) * np.sum(w) / nxp
+
+    # coefficient of variation is std / mean
+    if wm > 0:
+        cv = np.sqrt(num / den) / wm
+    else:
+        cv = 0
+
+    return cv
+
+def calc_lcv(cases, time, ny=10):
     """Local CV is equal weighted CV"""
 
+    # length of data
     nx = len(cases)
-    # initialize
+
+    # weights are 1
+    w = np.ones(ny)
+
+    # initialize, use ny-1 previous points and current one
     wcv = np.zeros(nx-ny+1)
 
-    # weights (always use previous ny points)
-    weights = np.ones(ny)
-
     for ix in range(len(wcv)):
-        # data
-        data = cases[ix:(ix+ny)] / pop[ix:(ix+ny)] * pop_norm
+        data = cases[ix:(ix+ny)]
+        wcv[ix] = calc_wcv(data, w)
 
-        # weighted mean incidence
-        wmi = np.sum(weights * data) / np.sum(weights)
+    t = time[ny-1:]
+    return wcv, t
 
-        # std
-        num = np.sum(weights*(data - wmi)**2)
-        nxp = np.sum(weights > 0)
-        den = (nxp - 1) * np.sum(weights) / nxp
+def calc_cv(cases, t, ny=10):
 
-        # coefficient of variation is std / mean
-        if wmi > 0:
-            wcv[ix] = np.sqrt(num / den) / wmi
-        else:
-            wcv[ix] = 0
+    # calculate local coefficient of variation
+    lcv, lcvt = calc_lcv(cases, t, ny=ny)
 
-    return wcv
-
-
-def calc_cv(cases, pop, t, ny=10, pop_norm=100000):
-    """Weighted CV using Local CV"""
-
-    # first calculate the local CV
-    lcv = calc_lcv(cases, pop, ny=ny, pop_norm=pop_norm)
-
-    # now go through and calculate weighted CV
     cv = np.zeros(lcv.size)
     for ix in range(lcv.size):
-        # number of data points to include in the calculation
-        offset = np.min([ix + 1, ny])
-        # use gaussian weights
-        weights = calc_weights(offset)
-        # calculate CV
-        cv[ix] = np.sum(weights * lcv[(ix - offset + 1):ix + 1]) / np.sum(weights)
+        w = calc_weights(ix+1, dx=0)
+        cv[ix] = np.sum(w * lcv[:ix+1]) / np.sum(w)
 
-    t = t[(ny-1):]
-
-    return cv, t
+    return cv, lcvt
 
 def get_cases_pop(code, inc_df, pop_df, year = np.arange(1974, 2019)):
     """Retrieve the cases and population from the World Bank and WHO"""

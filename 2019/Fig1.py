@@ -55,7 +55,7 @@ for region in regions:
             # get the data
             (cases, pop, time) = utils.get_cases_pop(row[DataNames.iso], inc_df, pop_df)
             # calculate CV
-            cv, cvt = utils.calc_cv(cases, pop, time)
+            cv, cvt = utils.calc_cv(cases, time)
             # calculate MI
             mi, mit = utils.calc_wmi(cases, pop, time)
 
