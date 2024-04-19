@@ -53,7 +53,7 @@ for region in regions:
             # country name by ISO code
             cname.append(row[DataNames.iso])
             # get the data
-            (cases, pop, time) = utils.get_cases_pop(row[DataNames.iso], inc_df, pop_df)
+            (cases, pop, time) = utils.get_cases_pop(row[DataNames.iso], inc_df, pop_df, year=np.arange(1980, 2019))
             # calculate CV
             cv, cvt = utils.calc_cv(cases, time)
             # calculate MI
