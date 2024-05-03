@@ -158,3 +158,7 @@ def get_cases_pop(code, inc_df, pop_df, year = np.arange(1974, 2019)):
 def get_country_code(country):
     """Get the ISO3 code for a country"""
     return pycountry.countries.search_fuzzy(country)[0].alpha_3
+
+def mi_transform(x):
+    """ Non-linear transform for y-axis """
+    return np.cbrt(x)
