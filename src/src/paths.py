@@ -14,7 +14,7 @@ src = root
 data = src / "data"
 
 # Absolute path to the `scripts` folder (contains figure/pipeline scripts)
-scripts = src / "2019"
+scripts = src / "scripts"
 
 # Absolute path to the `figures` folder (contains generated figures)
 figures = src / "figures"
