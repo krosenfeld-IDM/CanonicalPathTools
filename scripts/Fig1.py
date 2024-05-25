@@ -78,7 +78,7 @@ for region in regions:
 
 def transform(x):
     """ Non-linear transform for y-axis """
-    return np.cbrt(x)
+    return np.sqrt(x)
 
 
 # transform y axis data
